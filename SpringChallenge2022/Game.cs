@@ -15,8 +15,6 @@ public static class Game
 
     public static int CurrentTurn { get; set; }
 
-    public static bool EnnemyHeroInSight { get; set; }
-
     public static int TurnsLeft => 220 - CurrentTurn;
 
     public static readonly int PredictedTurns = 6;
@@ -34,7 +32,6 @@ public static class Game
         CurrentTurn = 1;
         while (true)
         {
-            EnnemyHeroInSight = false;
             List<Monster> monsters = new();
             Me.Heroes.Clear();
             Ennemy.Heroes.Clear();
@@ -48,7 +45,6 @@ public static class Game
             for (int i = 0; i < entityCount; i++)
             {
                 inputs = Console.ReadLine().Split(' ');
-                bool nearBase = int.Parse(inputs[9]) == 1;
                 int id = int.Parse(inputs[0]);
                 int type = int.Parse(inputs[1]);
                 Point position = new(int.Parse(inputs[2]), int.Parse(inputs[3]));
@@ -69,7 +65,7 @@ public static class Game
                         Id = id,
                         Position = position,
                         Health = int.Parse(inputs[6]),
-                        IsNearBase = nearBase,
+                        IsNearBase = int.Parse(inputs[9]) == 1,
                         ThreatFor = threat,
                         IsControlled = isControlled,
                         ShieldDuration = shieldDuration,
@@ -90,7 +86,6 @@ public static class Game
                 }
                 else
                 {
-                    EnnemyHeroInSight = true;
                     Ennemy.Heroes.Add(new EnnemyHero
                     {
                         Id = id,

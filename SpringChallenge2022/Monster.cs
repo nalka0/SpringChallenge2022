@@ -29,9 +29,9 @@ namespace SpringChallenge2022
         public void ComputeNextPositions(int count)
         {
             NextPositions = new List<Point>()
-        {
-            Position
-        };
+            {
+                Position
+            };
             int i = 1;
             while (!IsNearBase && ShieldDuration == 0 && Health > 2 && i < count && Game.Ennemy.Heroes.FirstOrDefault(x => Helpers.IsInRange(NextPositions[^1], x.Position, 1280) && x.DistanceToBase < 9000) is EnnemyHero winder)
             {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Runtime.CompilerServices;
 
 namespace SpringChallenge2022
 {
@@ -12,13 +11,18 @@ namespace SpringChallenge2022
         {
             if (!PlayInternal() && !PlayWithAlreadyOptimalPosition(null, true, false))
             {
-                Move(RallyPoint);
+                if (Position != RallyPoint || !Explore())
+                {
+                    Move(RallyPoint);
+                }
             }
         }
 
         protected abstract bool PlayWithAlreadyOptimalPosition(Monster target, bool allwoMove, bool isDefending);
 
         protected abstract bool PlayInternal();
+
+        protected abstract bool Explore();
 
         public bool Move(Point target)
         {
@@ -35,20 +39,17 @@ namespace SpringChallenge2022
             return true;
         }
 
-        public bool Shield(Entity target, [CallerMemberName] string callerName = "")
+        public bool Shield(Entity target)
         {
-            if (Game.Me.Mana >= 10 && target.ShieldDuration <= 1)
+            if (Game.Me.Mana >= 10 && target.ShieldDuration == 0)
             {
-                if (target.ShieldDuration == 1)
-                {
-                    Debug("NEW SHIELD METHOD ATTEMPT");
-                }
+                Game.Me.Mana -= 10;
                 Console.WriteLine($"SPELL SHIELD {target.Id}");
                 return true;
             }
             else
             {
-                Debug($"failed to cast SHIELD on {target.Id} {Game.Me.Mana > 10}/{target.ShieldDuration <= 1} from {callerName}");
+                Debug($"failed to cast SHIELD on {target.Id} {Game.Me.Mana > 10}/{target.ShieldDuration == 0}");
                 return false;
             }
         }
@@ -57,6 +58,7 @@ namespace SpringChallenge2022
         {
             if (Game.Me.Mana >= 10)
             {
+                Game.Me.Mana -= 10;
                 Console.WriteLine($"SPELL CONTROL {target.Id} {destination.X} {destination.Y}");
                 return true;
             }
@@ -71,6 +73,7 @@ namespace SpringChallenge2022
         {
             if (Game.Me.Mana >= 10)
             {
+                Game.Me.Mana -= 10;
                 Point windTarget = GetWindTarget();
                 Console.WriteLine($"SPELL WIND {windTarget.X} {windTarget.Y}");
                 return true;
